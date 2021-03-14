@@ -32,13 +32,14 @@ Utility functions for writeup
 &#34;&#34;&#34;
 
 import numpy as np
+import pandas as pd
 
 
 def diagnosis(error):
   &#34;&#34;&#34; 
   Inputs: 
 
-  error: If there are N samples, error is a N x 1 array
+  error: If there are N samples, error is a N x 1 array of the terminal value of the option hedging portfolio
   
   Outputs: 
 
@@ -70,7 +71,7 @@ def diagnosis(error):
 </code></dt>
 <dd>
 <div class="desc"><p>Inputs: </p>
-<p>error: If there are N samples, error is a N x 1 array</p>
+<p>error: If there are N samples, error is a N x 1 array of the terminal value of the option hedging portfolio</p>
 <p>Outputs: </p>
 <p>results: A dataframe with 1 row, consisting of the Mean-Squared-Error
 and CVaR at the 1%, 5%, 10% and 50% levels</p></div>
@@ -82,7 +83,7 @@ and CVaR at the 1%, 5%, 10% and 50% levels</p></div>
   &#34;&#34;&#34; 
   Inputs: 
 
-  error: If there are N samples, error is a N x 1 array
+  error: If there are N samples, error is a N x 1 array of the terminal value of the option hedging portfolio
   
   Outputs: 
 

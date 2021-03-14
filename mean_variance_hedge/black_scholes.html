@@ -132,14 +132,12 @@ def vega(St, K, r, sigma, tau, flag):
     return St * norm.pdf(d1) * np.sqrt(tau) / 100
 
 
-def bsinv(bs_price, St, K, r, tau, flag):
+def bsinv(price, St, K, r, tau, flag):
     &#34;&#34;&#34;
-    Returns implied Black vol from given call price, forward, strike and time
-    to maturity.
-    &#34;&#34;&#34;
-    # Set appropriate weight for option token o
+    Inputs:
 
-    # Ensure at least instrinsic value
+    price
+    &#34;&#34;&#34;
 
     error = lambda s: BlackScholes(St, K, r, s, tau, flag) - bs_price
 
@@ -196,23 +194,21 @@ flag: 1 if call, 0 if put</p>
 </details>
 </dd>
 <dt id="mean_variance_hedge.black_scholes.bsinv"><code class="name flex">
-<span>def <span class="ident">bsinv</span></span>(<span>bs_price, St, K, r, tau, flag)</span>
+<span>def <span class="ident">bsinv</span></span>(<span>price, St, K, r, tau, flag)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Returns implied Black vol from given call price, forward, strike and time
-to maturity.</p></div>
+<div class="desc"><p>Inputs:</p>
+<p>price</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def bsinv(bs_price, St, K, r, tau, flag):
+<pre><code class="python">def bsinv(price, St, K, r, tau, flag):
     &#34;&#34;&#34;
-    Returns implied Black vol from given call price, forward, strike and time
-    to maturity.
-    &#34;&#34;&#34;
-    # Set appropriate weight for option token o
+    Inputs:
 
-    # Ensure at least instrinsic value
+    price
+    &#34;&#34;&#34;
 
     error = lambda s: BlackScholes(St, K, r, s, tau, flag) - bs_price
 
