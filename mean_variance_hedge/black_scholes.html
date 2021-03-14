@@ -40,25 +40,28 @@ from numpy.random import default_rng
 from scipy.stats import norm
 from scipy.optimize import brentq
 
-def generate_GBM_paths(N_samples, T, r, sigma, dt, seed=2021):
+def generate_GBM_paths(n_samples, S0, T, r, sigma, dt, seed=2021):
     &#34;&#34;&#34;
     Exact simulation of GBM under the risk-neutral measure Q
     
-    N_samples: Number of paths to simulate
+    n_samples: Number of paths to simulate
+    S0: Initial Stock Price
     T: Timesteps
     r: risk free rate
     sigma: volatility 
     dt: Time increment, e.g. dt = 1/250 years. Ensure that sigma and dt are of the same scale
     seed: seed for reproducibilitys
+    
+    Returns:
+    tis: timesteps
+    Sts: n_samples * (T + 1) numpy array , in which each row corresponds to a stock path 
 
-    
-    
     &#34;&#34;&#34;
     rng = default_rng(seed)
-    Zs = rng.standard_normal((N_samples, T)) # Brownian Motion increments
-    Zs = np.hstack([np.zeros((N_samples, 1)), Zs])
+    Zs = rng.standard_normal((n_samples, T)) # Brownian Motion increments
+    Zs = np.hstack([np.zeros((n_samples, 1)), Zs])
     tis = np.arange(T + 1) #0, 1 .. T
-    tis = np.tile(tis, N_samples).reshape(N_samples, T + 1) # [[0, 1.. T], [0, 1.. T]...]
+    tis = np.tile(tis, n_samples).reshape(n_samples, T + 1) # [[0, 1.. T], [0, 1.. T]...]
     # Sample paths
     Sts = S0 * np.exp((r - 0.5 * sigma ** 2) * tis * dt + sigma * np.sqrt(dt) * np.cumsum(Zs, axis=1))
     return tis, Sts
@@ -138,7 +141,7 @@ def bsinv(bs_price, St, K, r, tau, flag):
 
     # Ensure at least instrinsic value
 
-    error = lambda s: bs(St, K, r, s, tau, flag) - bs_price
+    error = lambda s: BlackScholes(St, K, r, s, tau, flag) - bs_price
 
     s = brentq(error, 1e-9, 1e+9)
     return s</code></pre>
@@ -211,7 +214,7 @@ to maturity.</p></div>
 
     # Ensure at least instrinsic value
 
-    error = lambda s: bs(St, K, r, s, tau, flag) - bs_price
+    error = lambda s: BlackScholes(St, K, r, s, tau, flag) - bs_price
 
     s = brentq(error, 1e-9, 1e+9)
     return s</code></pre>
@@ -258,39 +261,46 @@ flag: 1 if call, 0 if put</p>
 </details>
 </dd>
 <dt id="mean_variance_hedge.black_scholes.generate_GBM_paths"><code class="name flex">
-<span>def <span class="ident">generate_GBM_paths</span></span>(<span>N_samples, T, r, sigma, dt, seed=2021)</span>
+<span>def <span class="ident">generate_GBM_paths</span></span>(<span>n_samples, S0, T, r, sigma, dt, seed=2021)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Exact simulation of GBM under the risk-neutral measure Q</p>
-<p>N_samples: Number of paths to simulate
+<p>n_samples: Number of paths to simulate
+S0: Initial Stock Price
 T: Timesteps
 r: risk free rate
 sigma: volatility
 dt: Time increment, e.g. dt = 1/250 years. Ensure that sigma and dt are of the same scale
-seed: seed for reproducibilitys</p></div>
+seed: seed for reproducibilitys</p>
+<p>Returns:
+tis: timesteps
+Sts: n_samples * (T + 1) numpy array , in which each row corresponds to a stock path</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def generate_GBM_paths(N_samples, T, r, sigma, dt, seed=2021):
+<pre><code class="python">def generate_GBM_paths(n_samples, S0, T, r, sigma, dt, seed=2021):
     &#34;&#34;&#34;
     Exact simulation of GBM under the risk-neutral measure Q
     
-    N_samples: Number of paths to simulate
+    n_samples: Number of paths to simulate
+    S0: Initial Stock Price
     T: Timesteps
     r: risk free rate
     sigma: volatility 
     dt: Time increment, e.g. dt = 1/250 years. Ensure that sigma and dt are of the same scale
     seed: seed for reproducibilitys
+    
+    Returns:
+    tis: timesteps
+    Sts: n_samples * (T + 1) numpy array , in which each row corresponds to a stock path 
 
-    
-    
     &#34;&#34;&#34;
     rng = default_rng(seed)
-    Zs = rng.standard_normal((N_samples, T)) # Brownian Motion increments
-    Zs = np.hstack([np.zeros((N_samples, 1)), Zs])
+    Zs = rng.standard_normal((n_samples, T)) # Brownian Motion increments
+    Zs = np.hstack([np.zeros((n_samples, 1)), Zs])
     tis = np.arange(T + 1) #0, 1 .. T
-    tis = np.tile(tis, N_samples).reshape(N_samples, T + 1) # [[0, 1.. T], [0, 1.. T]...]
+    tis = np.tile(tis, n_samples).reshape(n_samples, T + 1) # [[0, 1.. T], [0, 1.. T]...]
     # Sample paths
     Sts = S0 * np.exp((r - 0.5 * sigma ** 2) * tis * dt + sigma * np.sqrt(dt) * np.cumsum(Zs, axis=1))
     return tis, Sts</code></pre>
