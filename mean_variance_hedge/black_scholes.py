@@ -13,13 +13,13 @@ def generate_GBM_paths(n_samples, S0, T, r, sigma, dt, seed=2021):
     """
     Exact simulation of GBM under the risk-neutral measure Q
     
-    n_samples: Number of paths to simulate
-    S0: Initial Stock Price
-    T: Timesteps
-    r: risk free rate
-    sigma: volatility 
-    dt: Time increment, e.g. dt = 1/250 years. Ensure that sigma and dt are of the same scale
-    seed: seed for reproducibilitys
+    + n_samples: Number of paths to simulate
+    + S0: Initial Stock Price
+    + T: Timesteps
+    + r: risk free rate
+    + sigma: volatility 
+    + dt: Time increment, e.g. dt = 1/250 years. Ensure that sigma and dt are of the same scale
+    + seed: seed for reproducibilitys
     
     Returns:
     tis: timesteps
@@ -103,12 +103,21 @@ def vega(St, K, r, sigma, tau, flag):
 
 def bsinv(price, St, K, r, tau, flag):
     """
-    Inputs:
 
-    price
+    Inputs: 
+    price: price of the liability
+    St: current stock price
+    K: strike price
+    r: risk-free rate
+    tau: time to maturity
+    flag: 1 if call, 0 if put
+
+    Outputs:
+
+    Returns Black Scholes implied volatility
     """
 
-    error = lambda s: BlackScholes(St, K, r, s, tau, flag) - bs_price
+    error = lambda s: BlackScholes(St, K, r, s, tau, flag) - price
 
     s = brentq(error, 1e-9, 1e+9)
     return s
