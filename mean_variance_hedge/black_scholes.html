@@ -106,7 +106,7 @@ def delta(St, K, r, sigma, tau, flag):
 
     Outputs:
     
-    + Returns Black-Scholes Deltas
+    Returns the Black-Scholes Delta
 
     &#34;&#34;&#34;
     d1 = (np.log(St/K) + (r + 0.5 * sigma ** 2) * (tau)) / (sigma * np.sqrt(tau))
@@ -128,7 +128,7 @@ def vega(St, K, r, sigma, tau, flag):
 
     Outputs:
     
-    Returns Black-Scholes Vega
+    Returns the Black-Scholes Vega
 
     &#34;&#34;&#34;
     d1 = (np.log(St/K) + (r + 0.5 * sigma ** 2) * (tau)) / (sigma * np.sqrt(tau))
@@ -266,9 +266,7 @@ def bsinv(price, St, K, r, tau, flag):
 <li>flag: 1 if call, 0 if put</li>
 </ul>
 <p>Outputs:</p>
-<ul>
-<li>Returns Black-Scholes Deltas</li>
-</ul></div>
+<p>Returns the Black-Scholes Delta</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -286,7 +284,7 @@ def bsinv(price, St, K, r, tau, flag):
 
     Outputs:
     
-    + Returns Black-Scholes Deltas
+    Returns the Black-Scholes Delta
 
     &#34;&#34;&#34;
     d1 = (np.log(St/K) + (r + 0.5 * sigma ** 2) * (tau)) / (sigma * np.sqrt(tau))
@@ -364,7 +362,7 @@ def bsinv(price, St, K, r, tau, flag):
 <li>flag: 1 if call, 0 if put</li>
 </ul>
 <p>Outputs:</p>
-<p>Returns Black-Scholes Vega</p></div>
+<p>Returns the Black-Scholes Vega</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -382,7 +380,7 @@ def bsinv(price, St, K, r, tau, flag):
 
     Outputs:
     
-    Returns Black-Scholes Vega
+    Returns the Black-Scholes Vega
 
     &#34;&#34;&#34;
     d1 = (np.log(St/K) + (r + 0.5 * sigma ** 2) * (tau)) / (sigma * np.sqrt(tau))
