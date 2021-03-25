@@ -1,6 +1,6 @@
 # Mean-Variance-Hedging
 
-This repository is an exploration of mean-variance hedging in discrete time, in particular the Deep Hedging strategy from **Hans Buehler, Lukas Gonon, Josef Teichmann, and Ben Wood.Deep Hedging. 2018** and the dynamic programming hedging
+This repository is an exploration of mean-variance hedging in discrete time, in particular the Deep Hedging strategy from **Hans Buehler, Lukas Gonon, Josef Teichmann, and Ben Wood.Deep Hedging. 2018** and the dynamic programming hedging approach from **Černý, Aleš, Dynamic Programming and Mean-Variance Hedging in Discrete Time (October 1, 2003)**
 
 Jupyter Notebooks are available in the `examples/` folder, and also accessible online in Google Colab (listed below)
 
