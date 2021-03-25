@@ -75,7 +75,7 @@ def delta(St, K, r, sigma, tau, flag):
 
     Outputs:
     
-    + Returns Black-Scholes Deltas
+    Returns the Black-Scholes Delta
 
     """
     d1 = (np.log(St/K) + (r + 0.5 * sigma ** 2) * (tau)) / (sigma * np.sqrt(tau))
@@ -97,7 +97,7 @@ def vega(St, K, r, sigma, tau, flag):
 
     Outputs:
     
-    Returns Black-Scholes Vega
+    Returns the Black-Scholes Vega
 
     """
     d1 = (np.log(St/K) + (r + 0.5 * sigma ** 2) * (tau)) / (sigma * np.sqrt(tau))

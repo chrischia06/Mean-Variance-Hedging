@@ -97,7 +97,7 @@ def calc_mean_value_process(attainable_nodes, S0, K, rf, log_ret_space, T, scale
 
     Output:
 
-    Returns Hts: Mean-Value process Ht as dictionary, indexed by time t and log-returns
+    + Hts: Mean-Value process Ht as dictionary, indexed by time t and log-returns
     """
 
     N_STATES = len(log_ret_space)

@@ -6,7 +6,7 @@ Jupyter Notebooks are available in the `examples/` folder, and also accessible o
 
 To run the examples locally, ensure that all dependencies are installed by running `pip install -r requirements.txt`, and ensure that the `mean_variance_hedge` folder is used as a directory for the corresponding utilities and functions to be used.
 
-Documentation on how to use the functions within `mean_variance_hedge` is available at : [https://chrischia06.github.io/mean-Variance-Hedging/mean_variance_hedge/](chrischia06.github.io/mean-Variance-Hedging/mean_variance_hedge/)
+Documentation on how to use the functions within `mean_variance_hedge` is available at : [https://chrischia06.github.io/Mean-Variance-Hedging/mean_variance_hedge/](https://chrischia06.github.io/Mean-Variance-Hedging/mean_variance_hedge/)
 
 ## Notebooks
 
@@ -22,17 +22,17 @@ Documentation on how to use the functions within `mean_variance_hedge` is availa
 **Deep Hedging in the Black Scholes setting**
 
 + `examples/DeepHedgingBlackScholes.ipynb`
-+ Accessible online as a [Colab Notebook](https://colab.research.google.com/drive/1Zzc0BUcjt9Pxa7Z-5JiGx5GMklAg9WZB?usp=sharing)
++ Accessible online as a [Colab Notebook](https://colab.research.google.com/drive/1lZ8z5FykDG1NrvasHGuIzKUQMAhKLJRi?usp=sharing)
 
 **Deep Hedging in a Heston setting**
 
 + `examples/DeepHedgingHeston.ipynb`
-+ Accessible online as a [Colab Notebook](https://colab.research.google.com/drive/1Zzc0BUcjt9Pxa7Z-5JiGx5GMklAg9WZB?usp=sharing)
++ Accessible online as a [Colab Notebook](https://colab.research.google.com/drive/1gXxhLxgPOYiHEaS2v3NWCe9F67hkwXQl?usp=sharing)
 
 Deep Hedging in a Rough Bergomi setting
 
 + `examples/DeepHedgingRoughBergomi.ipynb`
-+ Accessible online as a [Colab Notebook](https://colab.research.google.com/drive/1Zzc0BUcjt9Pxa7Z-5JiGx5GMklAg9WZB?usp=sharing)
++ Accessible online as a [Colab Notebook](https://colab.research.google.com/drive/1XOHOhD9BQUe_70cUlKk_dRetejWGgxL9?usp=sharing)
 
 
 # References
@@ -41,7 +41,11 @@ Deep Hedging in a Rough Bergomi setting
 
 **Hans Buehler, Lukas Gonon, Josef Teichmann, and Ben Wood.Deep Hedging. 2018. arXiv:1802.03042 [q-fin.CP].**
 
++ And code from: [https://people.math.ethz.ch/~jteichma/index.php?content=teach_mlf2019](https://people.math.ethz.ch/~jteichma/index.php?content=teach_mlf2019)
+
 **Johannes  Ruf  and  Weiguan  Wang.Hedging  with  Neural  Networks.  2020.arXiv:2004.08891 [q-fin.RM]**
+
++ And code from: [https://github.com/guanzi0629/Hedging_Neural_Networks](https://github.com/guanzi0629/Hedging_Neural_Networks)
 
 **Cornelis  W  Oosterlee  and  Lech  A  Grzelak.Mathematical  Modelling  and Computation in Finance. World Scientific (Europe), 2019.**
 
