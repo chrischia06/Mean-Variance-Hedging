@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.9.2" />
 <title>mean_variance_hedge.dynamic_programming API documentation</title>
-<meta name="description" content="Implements methods from …" />
+<meta name="description" content="Based on …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,7 +22,7 @@
 <h1 class="title">Module <code>mean_variance_hedge.dynamic_programming</code></h1>
 </header>
 <section id="section-intro">
-<p>Implements methods from</p>
+<p>Based on</p>
 <p>Černý, Aleš, Dynamic Programming and Mean-Variance Hedging in Discrete Time
 (October 1, 2003). Applied Mathematical Finance, 2004, 11(1), 1-25,
 Available at SSRN: <a href="https://ssrn.com/abstract=561223">https://ssrn.com/abstract=561223</a>
@@ -32,12 +32,14 @@ or <a href="http://dx.doi.org/10.2139/ssrn.561223">http://dx.doi.org/10.2139/ssr
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-Implements methods from
+Based on
 
 Černý, Aleš, Dynamic Programming and Mean-Variance Hedging in Discrete Time 
 (October 1, 2003). Applied Mathematical Finance, 2004, 11(1), 1-25, 
 Available at SSRN: https://ssrn.com/abstract=561223 
 or http://dx.doi.org/10.2139/ssrn.561223 
+
+
 &#34;&#34;&#34;
 
 import numpy as np
@@ -52,18 +54,17 @@ def possible_nodes(log_ret_space, T, scale_factor):
     &#34;&#34;&#34;
     Inputs: 
 
-    log_ret_space: array of log-returns
-    T: time at maturity
-
-    Recommendeded to space log-returns equally so they recombine,
-    and scale log-returns so that they are integers
-    example: [-6, -4, -2, 0, 2, 4, 6]
+    + log_ret_space: array of log-returns
+    + T: time at maturity
 
     Outputs: 
 
-    Returns possible nodes as a Dictionary, 
-    Indexed by time t = 0..T, with values 
-    being the attainable log-returns for that time t
+    + attainable_nodes: Attainable nodes (log-returns) as a dictionary indexed by time t = 0, ... , T. 
+    The entries of attainable_nodes[t] would be the attainable log-returns at time t
+
+    Note: It is recommendeded to space log-returns equally so they recombine,
+    and scale log-returns so that they are integers
+    example: [-6, -4, -2, 0, 2, 4, 6]
 
     &#34;&#34;&#34;
     assert len(log_ret_space) &gt; 0
@@ -85,13 +86,14 @@ def possible_nodes(log_ret_space, T, scale_factor):
 def calc_variance_optimal_measure(ret_space, rf, p_probs):
     &#34;&#34;&#34;
     Inputs:
-    ret_space: array of returns, i.e. exp(log_returns)
-    rf: risk-free return
-    p_probs: probabilitites under the physical measure
+    + ret_space: array of returns, i.e. exp(log_returns)
+    + rf: risk-free return
+    + p_probs: probabilitites under the physical measure
 
     Outputs:
 
-    Returns quantities a, b, m, and q_probs, the latter of which is the variance optimal probabilities
+    + a, b, m: quantities required to calculate `q_probs`
+    + q_probs: the probabilities under the variance optimal probabilities
     &#34;&#34;&#34;
 
     assert len(ret_space) &gt; 0
@@ -110,21 +112,21 @@ def calc_mean_value_process(attainable_nodes, S0, K, rf, log_ret_space, T, scale
     &#34;&#34;&#34;
     Inputs:
 
-    attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
+    + attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
 
-    S0: Initial asset price, e.g. 100
+    + S0: Initial asset price, e.g. 100
 
-    K: Strike
+    + K: Strike
 
-    scale_factor: factor to divide log-return indices by, e.g. 100
+    + scale_factor: factor to divide log-return indices by, e.g. 100
 
-    rf: risk-free return (discrete), e.g. (1.001)
+    + rf: risk-free return (discrete), e.g. (1.001)
 
-    log_ret_space: array of log-returns
+    + log_ret_space: array of log-returns
 
-    T: time at maturity
+    + T: time at maturity
 
-    q_probs: Variance-optimal probabilities
+    + q_probs: Variance-optimal probabilities
 
     Output:
 
@@ -154,27 +156,28 @@ def calc_dynamic_deltas(attainable_nodes, Hts, S0, rf, log_ret_space, T, scale_f
     &#34;&#34;&#34;
     Inputs:
     
-    attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
+    + attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
 
-    Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
+    + Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
 
-    S0: Initial asset price, e.g. 100
+    + S0: Initial asset price, e.g. 100
 
-    scale_factor: factor to divide log-return indices by, e.g. 100
+    + scale_factor: factor to divide log-return indices by, e.g. 100
 
-    rf: risk-free return (discrete), e.g. (1.001)
+    + rf: risk-free return (discrete), e.g. (1.001)
 
-    log_ret_space: array of log-returns
+    + log_ret_space: array of log-returns
 
-    T: time at maturity
+    + T: time at maturity
 
-    p_probs: physical probabilities under P
+    + p_probs: physical probabilities under P
 
-    Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
+    + Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
 
     Outputs:
 
-    dynamic_delta: units to hedge as dictionary, indexed by time t and log returns
+    + dynamic_delta: the locally optimal hedge as a nested dictionary, indexed by time t and log-returns
+
     &#34;&#34;&#34;
     log_ret_space2 = [int(round(x * scale_factor)) for x in log_ret_space]
     N_STATES = len(log_ret_space)
@@ -199,29 +202,29 @@ def calc_expected_squared_replication_error(attainable_nodes, Hts, dynamic_delta
     &#34;&#34;&#34;
     Inputs:
     
-    attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
+    + attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
 
-    Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
+    + Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
 
-    dynamic_delta: Deltas at each node  from the function `calc_dynamic_deltas`
+    + dynamic_delta: Deltas at each node  from the function `calc_dynamic_deltas`
 
-    S0: Initial asset price, e.g. 100
+    + S0: Initial asset price, e.g. 100
 
-    scale_factor: factor to divide log-return indices by, e.g. 100
+    + scale_factor: factor to divide log-return indices by, e.g. 100
 
-    rf: risk-free return (discrete), e.g. (1.001)
+    + rf: risk-free return (discrete), e.g. (1.001)
 
-    log_ret_space: array of log-returns
+    + log_ret_space: array of log-returns
 
-    T: time at maturity
+    + T: time at maturity
 
-    p_probs: physical probabilities under P
+    + p_probs: physical probabilities under P
 
-    Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
+    + Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
 
     Outputs:
 
-    expected_squared_replication_error: the ESRE as a dictionary, indexed by time t and log returns
+    + expected_squared_replication_error: the ESRE as a dictionary, indexed by time t and log returns
 
     &#34;&#34;&#34;
     expected_squared_replication_error = {}
@@ -244,33 +247,33 @@ def calc_squared_error_process(attainable_nodes, Hts, dynamic_delta, ERSEs, S0, 
     &#34;&#34;&#34;
     Inputs:
     
-    attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
+    + attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
 
-    Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
+    + Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
 
-    dynamic_delta: Deltas at each node  from the function `calc_dynamic_deltas`
+    + dynamic_delta: locally optimal deltas at each node  from the function `calc_dynamic_deltas`
 
-    ERSEs: Expected Squared Replication Errors from `calc_expected_squared_replication_error`
+    + ERSEs: Expected Squared Replication Errors from `calc_expected_squared_replication_error`
 
-    S0: Initial asset price, e.g. 100
+    + S0: Initial asset price, e.g. 100
 
-    scale_factor: factor to divide log-return indices by, e.g. 100
+    + scale_factor: factor to divide log-return indices by, e.g. 100
 
-    rf: risk-free return (discrete), e.g. (1.001)
+    + rf: risk-free return (discrete), e.g. (1.001)
 
-    log_ret_space: array of log-returns
+    + log_ret_space: array of log-returns
 
-    T: time at maturity
+    + T: time at maturity
 
-    p_probs: physical probabilities under P
+    + p_probs: physical probabilities under P
 
-    b: value from `calc_variance_optimal_measure`
+    + b: value from `calc_variance_optimal_measure`
 
-    Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
+    + Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
 
     Outputs:
 
-    squared_error_process: the Squared Error Process as a dictionary, indexed by time t and log returns
+    + squared_error_process: the Squared Error Process as a nested dictionary, indexed by time t and log returns
 
     &#34;&#34;&#34;
     squared_error_process = {}
@@ -309,17 +312,39 @@ def calc_squared_error_process(attainable_nodes, Hts, dynamic_delta, ERSEs, S0, 
 </code></dt>
 <dd>
 <div class="desc"><p>Inputs:</p>
+<ul>
+<li>
 <p>attainable_nodes: attainable log-returns indexed by time t, from the <code><a title="mean_variance_hedge.dynamic_programming.possible_nodes" href="#mean_variance_hedge.dynamic_programming.possible_nodes">possible_nodes()</a></code> function</p>
+</li>
+<li>
 <p>Hts: Mean-Value process of the liability from the function <code><a title="mean_variance_hedge.dynamic_programming.calc_mean_value_process" href="#mean_variance_hedge.dynamic_programming.calc_mean_value_process">calc_mean_value_process()</a></code></p>
+</li>
+<li>
 <p>S0: Initial asset price, e.g. 100</p>
+</li>
+<li>
 <p>scale_factor: factor to divide log-return indices by, e.g. 100</p>
+</li>
+<li>
 <p>rf: risk-free return (discrete), e.g. (1.001)</p>
+</li>
+<li>
 <p>log_ret_space: array of log-returns</p>
+</li>
+<li>
 <p>T: time at maturity</p>
+</li>
+<li>
 <p>p_probs: physical probabilities under P</p>
+</li>
+<li>
 <p>Hts: S0, rf, log_ret_space, T, scale_factor, q_probs</p>
+</li>
+</ul>
 <p>Outputs:</p>
-<p>dynamic_delta: units to hedge as dictionary, indexed by time t and log returns</p></div>
+<ul>
+<li>dynamic_delta: the locally optimal hedge as a nested dictionary, indexed by time t and log-returns</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -328,27 +353,28 @@ def calc_squared_error_process(attainable_nodes, Hts, dynamic_delta, ERSEs, S0, 
     &#34;&#34;&#34;
     Inputs:
     
-    attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
+    + attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
 
-    Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
+    + Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
 
-    S0: Initial asset price, e.g. 100
+    + S0: Initial asset price, e.g. 100
 
-    scale_factor: factor to divide log-return indices by, e.g. 100
+    + scale_factor: factor to divide log-return indices by, e.g. 100
 
-    rf: risk-free return (discrete), e.g. (1.001)
+    + rf: risk-free return (discrete), e.g. (1.001)
 
-    log_ret_space: array of log-returns
+    + log_ret_space: array of log-returns
 
-    T: time at maturity
+    + T: time at maturity
 
-    p_probs: physical probabilities under P
+    + p_probs: physical probabilities under P
 
-    Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
+    + Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
 
     Outputs:
 
-    dynamic_delta: units to hedge as dictionary, indexed by time t and log returns
+    + dynamic_delta: the locally optimal hedge as a nested dictionary, indexed by time t and log-returns
+
     &#34;&#34;&#34;
     log_ret_space2 = [int(round(x * scale_factor)) for x in log_ret_space]
     N_STATES = len(log_ret_space)
@@ -374,19 +400,43 @@ def calc_squared_error_process(attainable_nodes, Hts, dynamic_delta, ERSEs, S0, 
 </code></dt>
 <dd>
 <div class="desc"><p>Inputs:</p>
+<ul>
+<li>
 <p>attainable_nodes: attainable log-returns indexed by time t, from the <code><a title="mean_variance_hedge.dynamic_programming.possible_nodes" href="#mean_variance_hedge.dynamic_programming.possible_nodes">possible_nodes()</a></code> function</p>
+</li>
+<li>
 <p>Hts: Mean-Value process of the liability from the function <code><a title="mean_variance_hedge.dynamic_programming.calc_mean_value_process" href="#mean_variance_hedge.dynamic_programming.calc_mean_value_process">calc_mean_value_process()</a></code></p>
+</li>
+<li>
 <p>dynamic_delta: Deltas at each node
 from the function <code><a title="mean_variance_hedge.dynamic_programming.calc_dynamic_deltas" href="#mean_variance_hedge.dynamic_programming.calc_dynamic_deltas">calc_dynamic_deltas()</a></code></p>
+</li>
+<li>
 <p>S0: Initial asset price, e.g. 100</p>
+</li>
+<li>
 <p>scale_factor: factor to divide log-return indices by, e.g. 100</p>
+</li>
+<li>
 <p>rf: risk-free return (discrete), e.g. (1.001)</p>
+</li>
+<li>
 <p>log_ret_space: array of log-returns</p>
+</li>
+<li>
 <p>T: time at maturity</p>
+</li>
+<li>
 <p>p_probs: physical probabilities under P</p>
+</li>
+<li>
 <p>Hts: S0, rf, log_ret_space, T, scale_factor, q_probs</p>
+</li>
+</ul>
 <p>Outputs:</p>
-<p>expected_squared_replication_error: the ESRE as a dictionary, indexed by time t and log returns</p></div>
+<ul>
+<li>expected_squared_replication_error: the ESRE as a dictionary, indexed by time t and log returns</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -395,29 +445,29 @@ from the function <code><a title="mean_variance_hedge.dynamic_programming.calc_d
     &#34;&#34;&#34;
     Inputs:
     
-    attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
+    + attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
 
-    Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
+    + Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
 
-    dynamic_delta: Deltas at each node  from the function `calc_dynamic_deltas`
+    + dynamic_delta: Deltas at each node  from the function `calc_dynamic_deltas`
 
-    S0: Initial asset price, e.g. 100
+    + S0: Initial asset price, e.g. 100
 
-    scale_factor: factor to divide log-return indices by, e.g. 100
+    + scale_factor: factor to divide log-return indices by, e.g. 100
 
-    rf: risk-free return (discrete), e.g. (1.001)
+    + rf: risk-free return (discrete), e.g. (1.001)
 
-    log_ret_space: array of log-returns
+    + log_ret_space: array of log-returns
 
-    T: time at maturity
+    + T: time at maturity
 
-    p_probs: physical probabilities under P
+    + p_probs: physical probabilities under P
 
-    Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
+    + Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
 
     Outputs:
 
-    expected_squared_replication_error: the ESRE as a dictionary, indexed by time t and log returns
+    + expected_squared_replication_error: the ESRE as a dictionary, indexed by time t and log returns
 
     &#34;&#34;&#34;
     expected_squared_replication_error = {}
@@ -442,14 +492,32 @@ from the function <code><a title="mean_variance_hedge.dynamic_programming.calc_d
 </code></dt>
 <dd>
 <div class="desc"><p>Inputs:</p>
+<ul>
+<li>
 <p>attainable_nodes: attainable log-returns indexed by time t, from the <code><a title="mean_variance_hedge.dynamic_programming.possible_nodes" href="#mean_variance_hedge.dynamic_programming.possible_nodes">possible_nodes()</a></code> function</p>
+</li>
+<li>
 <p>S0: Initial asset price, e.g. 100</p>
+</li>
+<li>
 <p>K: Strike</p>
+</li>
+<li>
 <p>scale_factor: factor to divide log-return indices by, e.g. 100</p>
+</li>
+<li>
 <p>rf: risk-free return (discrete), e.g. (1.001)</p>
+</li>
+<li>
 <p>log_ret_space: array of log-returns</p>
+</li>
+<li>
 <p>T: time at maturity</p>
+</li>
+<li>
 <p>q_probs: Variance-optimal probabilities</p>
+</li>
+</ul>
 <p>Output:</p>
 <p>Returns Hts: Mean-Value process Ht as dictionary, indexed by time t and log-returns</p></div>
 <details class="source">
@@ -460,21 +528,21 @@ from the function <code><a title="mean_variance_hedge.dynamic_programming.calc_d
     &#34;&#34;&#34;
     Inputs:
 
-    attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
+    + attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
 
-    S0: Initial asset price, e.g. 100
+    + S0: Initial asset price, e.g. 100
 
-    K: Strike
+    + K: Strike
 
-    scale_factor: factor to divide log-return indices by, e.g. 100
+    + scale_factor: factor to divide log-return indices by, e.g. 100
 
-    rf: risk-free return (discrete), e.g. (1.001)
+    + rf: risk-free return (discrete), e.g. (1.001)
 
-    log_ret_space: array of log-returns
+    + log_ret_space: array of log-returns
 
-    T: time at maturity
+    + T: time at maturity
 
-    q_probs: Variance-optimal probabilities
+    + q_probs: Variance-optimal probabilities
 
     Output:
 
@@ -505,21 +573,49 @@ from the function <code><a title="mean_variance_hedge.dynamic_programming.calc_d
 </code></dt>
 <dd>
 <div class="desc"><p>Inputs:</p>
+<ul>
+<li>
 <p>attainable_nodes: attainable log-returns indexed by time t, from the <code><a title="mean_variance_hedge.dynamic_programming.possible_nodes" href="#mean_variance_hedge.dynamic_programming.possible_nodes">possible_nodes()</a></code> function</p>
+</li>
+<li>
 <p>Hts: Mean-Value process of the liability from the function <code><a title="mean_variance_hedge.dynamic_programming.calc_mean_value_process" href="#mean_variance_hedge.dynamic_programming.calc_mean_value_process">calc_mean_value_process()</a></code></p>
-<p>dynamic_delta: Deltas at each node
+</li>
+<li>
+<p>dynamic_delta: locally optimal deltas at each node
 from the function <code><a title="mean_variance_hedge.dynamic_programming.calc_dynamic_deltas" href="#mean_variance_hedge.dynamic_programming.calc_dynamic_deltas">calc_dynamic_deltas()</a></code></p>
+</li>
+<li>
 <p>ERSEs: Expected Squared Replication Errors from <code><a title="mean_variance_hedge.dynamic_programming.calc_expected_squared_replication_error" href="#mean_variance_hedge.dynamic_programming.calc_expected_squared_replication_error">calc_expected_squared_replication_error()</a></code></p>
+</li>
+<li>
 <p>S0: Initial asset price, e.g. 100</p>
+</li>
+<li>
 <p>scale_factor: factor to divide log-return indices by, e.g. 100</p>
+</li>
+<li>
 <p>rf: risk-free return (discrete), e.g. (1.001)</p>
+</li>
+<li>
 <p>log_ret_space: array of log-returns</p>
+</li>
+<li>
 <p>T: time at maturity</p>
+</li>
+<li>
 <p>p_probs: physical probabilities under P</p>
+</li>
+<li>
 <p>b: value from <code><a title="mean_variance_hedge.dynamic_programming.calc_variance_optimal_measure" href="#mean_variance_hedge.dynamic_programming.calc_variance_optimal_measure">calc_variance_optimal_measure()</a></code></p>
+</li>
+<li>
 <p>Hts: S0, rf, log_ret_space, T, scale_factor, q_probs</p>
+</li>
+</ul>
 <p>Outputs:</p>
-<p>squared_error_process: the Squared Error Process as a dictionary, indexed by time t and log returns</p></div>
+<ul>
+<li>squared_error_process: the Squared Error Process as a nested dictionary, indexed by time t and log returns</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -528,33 +624,33 @@ from the function <code><a title="mean_variance_hedge.dynamic_programming.calc_d
     &#34;&#34;&#34;
     Inputs:
     
-    attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
+    + attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
 
-    Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
+    + Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
 
-    dynamic_delta: Deltas at each node  from the function `calc_dynamic_deltas`
+    + dynamic_delta: locally optimal deltas at each node  from the function `calc_dynamic_deltas`
 
-    ERSEs: Expected Squared Replication Errors from `calc_expected_squared_replication_error`
+    + ERSEs: Expected Squared Replication Errors from `calc_expected_squared_replication_error`
 
-    S0: Initial asset price, e.g. 100
+    + S0: Initial asset price, e.g. 100
 
-    scale_factor: factor to divide log-return indices by, e.g. 100
+    + scale_factor: factor to divide log-return indices by, e.g. 100
 
-    rf: risk-free return (discrete), e.g. (1.001)
+    + rf: risk-free return (discrete), e.g. (1.001)
 
-    log_ret_space: array of log-returns
+    + log_ret_space: array of log-returns
 
-    T: time at maturity
+    + T: time at maturity
 
-    p_probs: physical probabilities under P
+    + p_probs: physical probabilities under P
 
-    b: value from `calc_variance_optimal_measure`
+    + b: value from `calc_variance_optimal_measure`
 
-    Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
+    + Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
 
     Outputs:
 
-    squared_error_process: the Squared Error Process as a dictionary, indexed by time t and log returns
+    + squared_error_process: the Squared Error Process as a nested dictionary, indexed by time t and log returns
 
     &#34;&#34;&#34;
     squared_error_process = {}
@@ -584,11 +680,14 @@ from the function <code><a title="mean_variance_hedge.dynamic_programming.calc_d
 </code></dt>
 <dd>
 <div class="desc"><p>Inputs:
-ret_space: array of returns, i.e. exp(log_returns)
-rf: risk-free return
-p_probs: probabilitites under the physical measure</p>
++ ret_space: array of returns, i.e. exp(log_returns)
++ rf: risk-free return
++ p_probs: probabilitites under the physical measure</p>
 <p>Outputs:</p>
-<p>Returns quantities a, b, m, and q_probs, the latter of which is the variance optimal probabilities</p></div>
+<ul>
+<li>a, b, m: quantities required to calculate <code>q_probs</code></li>
+<li>q_probs: the probabilities under the variance optimal probabilities</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -596,13 +695,14 @@ p_probs: probabilitites under the physical measure</p>
 <pre><code class="python">def calc_variance_optimal_measure(ret_space, rf, p_probs):
     &#34;&#34;&#34;
     Inputs:
-    ret_space: array of returns, i.e. exp(log_returns)
-    rf: risk-free return
-    p_probs: probabilitites under the physical measure
+    + ret_space: array of returns, i.e. exp(log_returns)
+    + rf: risk-free return
+    + p_probs: probabilitites under the physical measure
 
     Outputs:
 
-    Returns quantities a, b, m, and q_probs, the latter of which is the variance optimal probabilities
+    + a, b, m: quantities required to calculate `q_probs`
+    + q_probs: the probabilities under the variance optimal probabilities
     &#34;&#34;&#34;
 
     assert len(ret_space) &gt; 0
@@ -622,15 +722,18 @@ p_probs: probabilitites under the physical measure</p>
 </code></dt>
 <dd>
 <div class="desc"><p>Inputs: </p>
-<p>log_ret_space: array of log-returns
-T: time at maturity</p>
-<p>Recommendeded to space log-returns equally so they recombine,
-and scale log-returns so that they are integers
-example: [-6, -4, -2, 0, 2, 4, 6]</p>
+<ul>
+<li>log_ret_space: array of log-returns</li>
+<li>T: time at maturity</li>
+</ul>
 <p>Outputs: </p>
-<p>Returns possible nodes as a Dictionary,
-Indexed by time t = 0..T, with values
-being the attainable log-returns for that time t</p></div>
+<ul>
+<li>attainable_nodes: Attainable nodes (log-returns) as a dictionary indexed by time t = 0, &hellip; , T.
+The entries of attainable_nodes[t] would be the attainable log-returns at time t</li>
+</ul>
+<p>Note: It is recommendeded to space log-returns equally so they recombine,
+and scale log-returns so that they are integers
+example: [-6, -4, -2, 0, 2, 4, 6]</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -639,18 +742,17 @@ being the attainable log-returns for that time t</p></div>
     &#34;&#34;&#34;
     Inputs: 
 
-    log_ret_space: array of log-returns
-    T: time at maturity
-
-    Recommendeded to space log-returns equally so they recombine,
-    and scale log-returns so that they are integers
-    example: [-6, -4, -2, 0, 2, 4, 6]
+    + log_ret_space: array of log-returns
+    + T: time at maturity
 
     Outputs: 
 
-    Returns possible nodes as a Dictionary, 
-    Indexed by time t = 0..T, with values 
-    being the attainable log-returns for that time t
+    + attainable_nodes: Attainable nodes (log-returns) as a dictionary indexed by time t = 0, ... , T. 
+    The entries of attainable_nodes[t] would be the attainable log-returns at time t
+
+    Note: It is recommendeded to space log-returns equally so they recombine,
+    and scale log-returns so that they are integers
+    example: [-6, -4, -2, 0, 2, 4, 6]
 
     &#34;&#34;&#34;
     assert len(log_ret_space) &gt; 0

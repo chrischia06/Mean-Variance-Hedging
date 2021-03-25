@@ -53,8 +53,11 @@ def generate_GBM_paths(n_samples, S0, T, r, sigma, dt, seed=2021):
     + seed: seed for reproducibilitys
     
     Returns:
-    tis: timesteps
-    Sts: n_samples * (T + 1) numpy array , in which each row corresponds to a stock path 
+
+    + tis: timesteps
+    + Sts: n_samples * (T + 1) numpy array , in which each row corresponds to a stock path 
+
+    Note: prices are generated under Q such that the drift is the risk free rate r
 
     &#34;&#34;&#34;
     rng = default_rng(seed)
@@ -71,16 +74,16 @@ def BlackScholes(St, K, r, sigma, tau, flag):
     &#34;&#34;&#34;
     Inputs: 
 
-    St: Current Price of the stock at time t
-    K: Strike Price
-    r: risk-fre rate
-    sigma: Black-Scholes implied volatility
-    tau: time-to-maturity. Ensure that sigma, tau are in the same scale.
-    flag: 1 if call, 0 if put
+    + St: Current Price of the stock at time t
+    + K: Strike Price
+    + r: risk-free rate
+    + sigma: Black-Scholes implied volatility
+    + tau: time-to-maturity. Ensure that sigma, tau are in the same scale.
+    + flag: 1 if call, 0 if put
 
     Outputs:
     
-    Returns Black-Scholes price
+    Returns the Black-Scholes price
 
     &#34;&#34;&#34;
     d1 = (np.log(St/K) + (r + 0.5 * sigma ** 2) * (tau)) / (sigma * np.sqrt(tau))
@@ -94,16 +97,16 @@ def delta(St, K, r, sigma, tau, flag):
     &#34;&#34;&#34;
     Inputs: 
 
-    St: Current Price of the stock at time t
-    K: Strike Price
-    r: risk-fre rate
-    sigma: Black-Scholes implied volatility
-    tau: time-to-maturity. Ensure that sigma, tau are in the same scale.
-    flag: 1 if call, 0 if put
+    + St: Current Price of the stock at time t
+    + K: Strike Price
+    + r: risk-fre rate
+    + sigma: Black-Scholes implied volatility
+    + tau: time-to-maturity. Ensure that sigma, tau are in the same scale.
+    + flag: 1 if call, 0 if put
 
     Outputs:
     
-    Returns Black-Scholes Deltas
+    + Returns Black-Scholes Deltas
 
     &#34;&#34;&#34;
     d1 = (np.log(St/K) + (r + 0.5 * sigma ** 2) * (tau)) / (sigma * np.sqrt(tau))
@@ -116,12 +119,12 @@ def vega(St, K, r, sigma, tau, flag):
     &#34;&#34;&#34;
     Inputs: 
 
-    St: Current Price of the stock at time t
-    K: Strike Price
-    r: risk-fre rate
-    sigma: Black-Scholes implied volatility
-    tau: time-to-maturity. Ensure that sigma, tau are in the same scale.
-    flag: 1 if call, 0 if put
+    + St: Current Price of the stock at time t
+    + K: Strike Price
+    + r: risk-free rate
+    + sigma: Black-Scholes implied volatility
+    + tau: time-to-maturity. Ensure that sigma, tau are in the same scale.
+    + flag: 1 if call, 0 if put
 
     Outputs:
     
@@ -134,24 +137,25 @@ def vega(St, K, r, sigma, tau, flag):
 
 def bsinv(price, St, K, r, tau, flag):
     &#34;&#34;&#34;
-
     Inputs: 
-    price: price of the liability
-    St: current stock price
-    K: strike price
-    r: risk-free rate
-    tau: time to maturity
-    flag: 1 if call, 0 if put
+    
+    + price: price of the liability
+    + St: current stock price
+    + K: strike price
+    + r: risk-free rate
+    + tau: time to maturity
+    + flag: 1 if call, 0 if put
 
     Outputs:
+    
+    + imp_vol: Black Scholes implied volatility
 
-    Returns Black Scholes implied volatility
     &#34;&#34;&#34;
 
     error = lambda s: BlackScholes(St, K, r, s, tau, flag) - price
+    imp_vol = brentq(error, 1e-9, 1e+9)
 
-    s = brentq(error, 1e-9, 1e+9)
-    return s</code></pre>
+    return imp_vol</code></pre>
 </details>
 </section>
 <section>
@@ -166,14 +170,16 @@ def bsinv(price, St, K, r, tau, flag):
 </code></dt>
 <dd>
 <div class="desc"><p>Inputs: </p>
-<p>St: Current Price of the stock at time t
-K: Strike Price
-r: risk-fre rate
-sigma: Black-Scholes implied volatility
-tau: time-to-maturity. Ensure that sigma, tau are in the same scale.
-flag: 1 if call, 0 if put</p>
+<ul>
+<li>St: Current Price of the stock at time t</li>
+<li>K: Strike Price</li>
+<li>r: risk-free rate</li>
+<li>sigma: Black-Scholes implied volatility</li>
+<li>tau: time-to-maturity. Ensure that sigma, tau are in the same scale.</li>
+<li>flag: 1 if call, 0 if put</li>
+</ul>
 <p>Outputs:</p>
-<p>Returns Black-Scholes price</p></div>
+<p>Returns the Black-Scholes price</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -182,16 +188,16 @@ flag: 1 if call, 0 if put</p>
     &#34;&#34;&#34;
     Inputs: 
 
-    St: Current Price of the stock at time t
-    K: Strike Price
-    r: risk-fre rate
-    sigma: Black-Scholes implied volatility
-    tau: time-to-maturity. Ensure that sigma, tau are in the same scale.
-    flag: 1 if call, 0 if put
+    + St: Current Price of the stock at time t
+    + K: Strike Price
+    + r: risk-free rate
+    + sigma: Black-Scholes implied volatility
+    + tau: time-to-maturity. Ensure that sigma, tau are in the same scale.
+    + flag: 1 if call, 0 if put
 
     Outputs:
     
-    Returns Black-Scholes price
+    Returns the Black-Scholes price
 
     &#34;&#34;&#34;
     d1 = (np.log(St/K) + (r + 0.5 * sigma ** 2) * (tau)) / (sigma * np.sqrt(tau))
@@ -206,39 +212,44 @@ flag: 1 if call, 0 if put</p>
 <span>def <span class="ident">bsinv</span></span>(<span>price, St, K, r, tau, flag)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Inputs:
-price: price of the liability
-St: current stock price
-K: strike price
-r: risk-free rate
-tau: time to maturity
-flag: 1 if call, 0 if put</p>
+<div class="desc"><p>Inputs: </p>
+<ul>
+<li>price: price of the liability</li>
+<li>St: current stock price</li>
+<li>K: strike price</li>
+<li>r: risk-free rate</li>
+<li>tau: time to maturity</li>
+<li>flag: 1 if call, 0 if put</li>
+</ul>
 <p>Outputs:</p>
-<p>Returns Black Scholes implied volatility</p></div>
+<ul>
+<li>imp_vol: Black Scholes implied volatility</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def bsinv(price, St, K, r, tau, flag):
     &#34;&#34;&#34;
-
     Inputs: 
-    price: price of the liability
-    St: current stock price
-    K: strike price
-    r: risk-free rate
-    tau: time to maturity
-    flag: 1 if call, 0 if put
+    
+    + price: price of the liability
+    + St: current stock price
+    + K: strike price
+    + r: risk-free rate
+    + tau: time to maturity
+    + flag: 1 if call, 0 if put
 
     Outputs:
+    
+    + imp_vol: Black Scholes implied volatility
 
-    Returns Black Scholes implied volatility
     &#34;&#34;&#34;
 
     error = lambda s: BlackScholes(St, K, r, s, tau, flag) - price
+    imp_vol = brentq(error, 1e-9, 1e+9)
 
-    s = brentq(error, 1e-9, 1e+9)
-    return s</code></pre>
+    return imp_vol</code></pre>
 </details>
 </dd>
 <dt id="mean_variance_hedge.black_scholes.delta"><code class="name flex">
@@ -246,14 +257,18 @@ flag: 1 if call, 0 if put</p>
 </code></dt>
 <dd>
 <div class="desc"><p>Inputs: </p>
-<p>St: Current Price of the stock at time t
-K: Strike Price
-r: risk-fre rate
-sigma: Black-Scholes implied volatility
-tau: time-to-maturity. Ensure that sigma, tau are in the same scale.
-flag: 1 if call, 0 if put</p>
+<ul>
+<li>St: Current Price of the stock at time t</li>
+<li>K: Strike Price</li>
+<li>r: risk-fre rate</li>
+<li>sigma: Black-Scholes implied volatility</li>
+<li>tau: time-to-maturity. Ensure that sigma, tau are in the same scale.</li>
+<li>flag: 1 if call, 0 if put</li>
+</ul>
 <p>Outputs:</p>
-<p>Returns Black-Scholes Deltas</p></div>
+<ul>
+<li>Returns Black-Scholes Deltas</li>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -262,16 +277,16 @@ flag: 1 if call, 0 if put</p>
     &#34;&#34;&#34;
     Inputs: 
 
-    St: Current Price of the stock at time t
-    K: Strike Price
-    r: risk-fre rate
-    sigma: Black-Scholes implied volatility
-    tau: time-to-maturity. Ensure that sigma, tau are in the same scale.
-    flag: 1 if call, 0 if put
+    + St: Current Price of the stock at time t
+    + K: Strike Price
+    + r: risk-fre rate
+    + sigma: Black-Scholes implied volatility
+    + tau: time-to-maturity. Ensure that sigma, tau are in the same scale.
+    + flag: 1 if call, 0 if put
 
     Outputs:
     
-    Returns Black-Scholes Deltas
+    + Returns Black-Scholes Deltas
 
     &#34;&#34;&#34;
     d1 = (np.log(St/K) + (r + 0.5 * sigma ** 2) * (tau)) / (sigma * np.sqrt(tau))
@@ -295,9 +310,12 @@ flag: 1 if call, 0 if put</p>
 <li>dt: Time increment, e.g. dt = 1/250 years. Ensure that sigma and dt are of the same scale</li>
 <li>seed: seed for reproducibilitys</li>
 </ul>
-<p>Returns:
-tis: timesteps
-Sts: n_samples * (T + 1) numpy array , in which each row corresponds to a stock path</p></div>
+<p>Returns:</p>
+<ul>
+<li>tis: timesteps</li>
+<li>Sts: n_samples * (T + 1) numpy array , in which each row corresponds to a stock path </li>
+</ul>
+<p>Note: prices are generated under Q such that the drift is the risk free rate r</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -315,8 +333,11 @@ Sts: n_samples * (T + 1) numpy array , in which each row corresponds to a stock 
     + seed: seed for reproducibilitys
     
     Returns:
-    tis: timesteps
-    Sts: n_samples * (T + 1) numpy array , in which each row corresponds to a stock path 
+
+    + tis: timesteps
+    + Sts: n_samples * (T + 1) numpy array , in which each row corresponds to a stock path 
+
+    Note: prices are generated under Q such that the drift is the risk free rate r
 
     &#34;&#34;&#34;
     rng = default_rng(seed)
@@ -334,12 +355,14 @@ Sts: n_samples * (T + 1) numpy array , in which each row corresponds to a stock 
 </code></dt>
 <dd>
 <div class="desc"><p>Inputs: </p>
-<p>St: Current Price of the stock at time t
-K: Strike Price
-r: risk-fre rate
-sigma: Black-Scholes implied volatility
-tau: time-to-maturity. Ensure that sigma, tau are in the same scale.
-flag: 1 if call, 0 if put</p>
+<ul>
+<li>St: Current Price of the stock at time t</li>
+<li>K: Strike Price</li>
+<li>r: risk-free rate</li>
+<li>sigma: Black-Scholes implied volatility</li>
+<li>tau: time-to-maturity. Ensure that sigma, tau are in the same scale.</li>
+<li>flag: 1 if call, 0 if put</li>
+</ul>
 <p>Outputs:</p>
 <p>Returns Black-Scholes Vega</p></div>
 <details class="source">
@@ -350,12 +373,12 @@ flag: 1 if call, 0 if put</p>
     &#34;&#34;&#34;
     Inputs: 
 
-    St: Current Price of the stock at time t
-    K: Strike Price
-    r: risk-fre rate
-    sigma: Black-Scholes implied volatility
-    tau: time-to-maturity. Ensure that sigma, tau are in the same scale.
-    flag: 1 if call, 0 if put
+    + St: Current Price of the stock at time t
+    + K: Strike Price
+    + r: risk-free rate
+    + sigma: Black-Scholes implied volatility
+    + tau: time-to-maturity. Ensure that sigma, tau are in the same scale.
+    + flag: 1 if call, 0 if put
 
     Outputs:
     
