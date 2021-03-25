@@ -12,22 +12,23 @@ def generate_CIR_paths(n_samples, alpha, b, sigma, dt, v_0, T, seed = 2021):
     based on Glasserman (2004)
     
     Exact simulation of the process V_t with dynamics given by the SDE:
+
     $$dV_{t} = alpha(b - V_{t}) dt + sigma sqrt(V_{t}) dW_{t}$$
 
     Inputs:
 
-    n_samples : Number of Vtss to simulate
-    alpha : speed of mean reversion
-    b: mean level of variance
-    sigma: volatility of the variance
-    dt: time-increment, e.g. dt = 1 / 250 years
-    v_0: initial variance
-    T: (integer) number of time steps
-    seed: numpy seed for reproducibility
+    + n_samples : Number of Vts to simulate
+    + alpha : speed of mean reversion
+    + b: mean level of variance
+    + sigma: volatility of the variance
+    + dt: time-increment, e.g. dt = 1 / 250 years
+    + v_0: initial variance
+    + T: (integer) number of time steps
+    + seed: numpy seed for reproducibility
 
     Outputs:
 
-    Vts: A n_samples by (T + 1) numpy array, where in each row corresponds
+    + Vts: A n_samples by (T + 1) numpy array, where in each row corresponds
     to a path V_{i, t} from 0 .. T
     """
     rng = np.random.default_rng(seed)
@@ -60,30 +61,32 @@ def generate_Heston_paths(n_samples, S0, rho, r, alpha, b, sigma, dt, v_0, T, se
     Almost Exact Heston scheme for the process with SDE
     
     $$dS_{t} = rS_{t} dt + S_{t} sqrt(V_{t}) dW_{t}$$
+
     $$dV_{t} = alpha(b - V_{t}) dt + sigma sqrt(V_{t}) dZ_{t}$$
-    $$fcorr(dW_{t}, dZ_{t}) = rho$$
+    
+    $$corr(dW_{t}, dZ_{t}) = rho$$
 
     Inputs:
 
-    n_samples : Number of Vtss to simulate
-    S0: Initial Stock Price
-    rho: correlation
-    r: risk-free rate
-    alpha : speed of mean reversion
-    b: mean level of variance
-    sigma: volatility of the variance
-    dt: time-increment, e.g. dt = 1 / 250 years
-    v_0: initial variance
-    T: (integer) number of time steps
-    seed: numpy seed for reproducibility
+    + n_samples : Number of Vtss to simulate
+    + S0: Initial Stock Price
+    + rho: correlation
+    + r: risk-free rate
+    + alpha : speed of mean reversion
+    + b: mean level of variance
+    + sigma: volatility of the variance
+    + dt: time-increment, e.g. dt = 1 / 250 years
+    + v_0: initial variance
+    + T: (integer) number of time steps
+    + seed: numpy seed for reproducibility
 
     Outputs:
 
-    Vts: A n_samples by T numpy array, where in each row corresponds
+    + Vts: A n_samples by T numpy array, where in each row corresponds
     to a path
     """
 
-    rng = np.random.default_rng(2021)
+    rng = np.random.default_rng(seed)
     Zs = rng.standard_normal(size = (n_samples, T)) # random normal increments
     Zs = (Zs - Zs.mean(axis= 0)) / Zs.std(axis = 0)
 
@@ -92,6 +95,7 @@ def generate_Heston_paths(n_samples, S0, rho, r, alpha, b, sigma, dt, v_0, T, se
                              b = b, sigma = sigma, 
                              dt = dt, v_0 = v_0, T = T, seed = seed)
 
+    # simulate the log-price process
     log_Sts = np.zeros((n_samples, T + 1))
     log_Sts[:, 0] = np.log(S0)
 

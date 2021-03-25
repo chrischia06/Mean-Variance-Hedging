@@ -1,10 +1,12 @@
 """
-Implements methods from
+Based on
 
 Černý, Aleš, Dynamic Programming and Mean-Variance Hedging in Discrete Time 
 (October 1, 2003). Applied Mathematical Finance, 2004, 11(1), 1-25, 
 Available at SSRN: https://ssrn.com/abstract=561223 
 or http://dx.doi.org/10.2139/ssrn.561223 
+
+
 """
 
 import numpy as np
@@ -19,18 +21,17 @@ def possible_nodes(log_ret_space, T, scale_factor):
     """
     Inputs: 
 
-    log_ret_space: array of log-returns
-    T: time at maturity
-
-    Recommendeded to space log-returns equally so they recombine,
-    and scale log-returns so that they are integers
-    example: [-6, -4, -2, 0, 2, 4, 6]
+    + log_ret_space: array of log-returns
+    + T: time at maturity
 
     Outputs: 
 
-    Returns possible nodes as a Dictionary, 
-    Indexed by time t = 0..T, with values 
-    being the attainable log-returns for that time t
+    + attainable_nodes: Attainable nodes (log-returns) as a dictionary indexed by time t = 0, ... , T. 
+    The entries of attainable_nodes[t] would be the attainable log-returns at time t
+
+    Note: It is recommendeded to space log-returns equally so they recombine,
+    and scale log-returns so that they are integers
+    example: [-6, -4, -2, 0, 2, 4, 6]
 
     """
     assert len(log_ret_space) > 0
@@ -52,13 +53,14 @@ def possible_nodes(log_ret_space, T, scale_factor):
 def calc_variance_optimal_measure(ret_space, rf, p_probs):
     """
     Inputs:
-    ret_space: array of returns, i.e. exp(log_returns)
-    rf: risk-free return
-    p_probs: probabilitites under the physical measure
+    + ret_space: array of returns, i.e. exp(log_returns)
+    + rf: risk-free return
+    + p_probs: probabilitites under the physical measure
 
     Outputs:
 
-    Returns quantities a, b, m, and q_probs, the latter of which is the variance optimal probabilities
+    + a, b, m: quantities required to calculate `q_probs`
+    + q_probs: the probabilities under the variance optimal probabilities
     """
 
     assert len(ret_space) > 0
@@ -77,21 +79,21 @@ def calc_mean_value_process(attainable_nodes, S0, K, rf, log_ret_space, T, scale
     """
     Inputs:
 
-    attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
+    + attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
 
-    S0: Initial asset price, e.g. 100
+    + S0: Initial asset price, e.g. 100
 
-    K: Strike
+    + K: Strike
 
-    scale_factor: factor to divide log-return indices by, e.g. 100
+    + scale_factor: factor to divide log-return indices by, e.g. 100
 
-    rf: risk-free return (discrete), e.g. (1.001)
+    + rf: risk-free return (discrete), e.g. (1.001)
 
-    log_ret_space: array of log-returns
+    + log_ret_space: array of log-returns
 
-    T: time at maturity
+    + T: time at maturity
 
-    q_probs: Variance-optimal probabilities
+    + q_probs: Variance-optimal probabilities
 
     Output:
 
@@ -121,27 +123,28 @@ def calc_dynamic_deltas(attainable_nodes, Hts, S0, rf, log_ret_space, T, scale_f
     """
     Inputs:
     
-    attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
+    + attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
 
-    Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
+    + Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
 
-    S0: Initial asset price, e.g. 100
+    + S0: Initial asset price, e.g. 100
 
-    scale_factor: factor to divide log-return indices by, e.g. 100
+    + scale_factor: factor to divide log-return indices by, e.g. 100
 
-    rf: risk-free return (discrete), e.g. (1.001)
+    + rf: risk-free return (discrete), e.g. (1.001)
 
-    log_ret_space: array of log-returns
+    + log_ret_space: array of log-returns
 
-    T: time at maturity
+    + T: time at maturity
 
-    p_probs: physical probabilities under P
+    + p_probs: physical probabilities under P
 
-    Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
+    + Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
 
     Outputs:
 
-    dynamic_delta: units to hedge as dictionary, indexed by time t and log returns
+    + dynamic_delta: the locally optimal hedge as a nested dictionary, indexed by time t and log-returns
+
     """
     log_ret_space2 = [int(round(x * scale_factor)) for x in log_ret_space]
     N_STATES = len(log_ret_space)
@@ -166,29 +169,29 @@ def calc_expected_squared_replication_error(attainable_nodes, Hts, dynamic_delta
     """
     Inputs:
     
-    attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
+    + attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
 
-    Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
+    + Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
 
-    dynamic_delta: Deltas at each node  from the function `calc_dynamic_deltas`
+    + dynamic_delta: Deltas at each node  from the function `calc_dynamic_deltas`
 
-    S0: Initial asset price, e.g. 100
+    + S0: Initial asset price, e.g. 100
 
-    scale_factor: factor to divide log-return indices by, e.g. 100
+    + scale_factor: factor to divide log-return indices by, e.g. 100
 
-    rf: risk-free return (discrete), e.g. (1.001)
+    + rf: risk-free return (discrete), e.g. (1.001)
 
-    log_ret_space: array of log-returns
+    + log_ret_space: array of log-returns
 
-    T: time at maturity
+    + T: time at maturity
 
-    p_probs: physical probabilities under P
+    + p_probs: physical probabilities under P
 
-    Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
+    + Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
 
     Outputs:
 
-    expected_squared_replication_error: the ESRE as a dictionary, indexed by time t and log returns
+    + expected_squared_replication_error: the ESRE as a dictionary, indexed by time t and log returns
 
     """
     expected_squared_replication_error = {}
@@ -211,33 +214,33 @@ def calc_squared_error_process(attainable_nodes, Hts, dynamic_delta, ERSEs, S0, 
     """
     Inputs:
     
-    attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
+    + attainable_nodes: attainable log-returns indexed by time t, from the `possible_nodes` function
 
-    Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
+    + Hts: Mean-Value process of the liability from the function `calc_mean_value_process`
 
-    dynamic_delta: Deltas at each node  from the function `calc_dynamic_deltas`
+    + dynamic_delta: locally optimal deltas at each node  from the function `calc_dynamic_deltas`
 
-    ERSEs: Expected Squared Replication Errors from `calc_expected_squared_replication_error`
+    + ERSEs: Expected Squared Replication Errors from `calc_expected_squared_replication_error`
 
-    S0: Initial asset price, e.g. 100
+    + S0: Initial asset price, e.g. 100
 
-    scale_factor: factor to divide log-return indices by, e.g. 100
+    + scale_factor: factor to divide log-return indices by, e.g. 100
 
-    rf: risk-free return (discrete), e.g. (1.001)
+    + rf: risk-free return (discrete), e.g. (1.001)
 
-    log_ret_space: array of log-returns
+    + log_ret_space: array of log-returns
 
-    T: time at maturity
+    + T: time at maturity
 
-    p_probs: physical probabilities under P
+    + p_probs: physical probabilities under P
 
-    b: value from `calc_variance_optimal_measure`
+    + b: value from `calc_variance_optimal_measure`
 
-    Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
+    + Hts: S0, rf, log_ret_space, T, scale_factor, q_probs
 
     Outputs:
 
-    squared_error_process: the Squared Error Process as a dictionary, indexed by time t and log returns
+    + squared_error_process: the Squared Error Process as a nested dictionary, indexed by time t and log returns
 
     """
     squared_error_process = {}

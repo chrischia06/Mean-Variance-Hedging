@@ -10,12 +10,11 @@ def diagnosis(error):
   """ 
   Inputs: 
 
-  error: If there are N samples, error is a N x 1 array of the terminal value of the option hedging portfolio
+  + error: If there are N samples, error is a N x 1 array of the terminal value of the option hedging portfolio
   
   Outputs: 
 
-  results: A dataframe with 1 row, consisting of the Mean-Squared-Error 
-           and CVaR at the 1%, 5%, 10% and 50% levels
+  + results: A dataframe with 1 row, consisting of the Mean-Squared-Error and CVaR at the 1%, 5%, 10% and 50% levels
   """
   one_period_MSE = np.mean(error ** 2)
   cvar_001 = -np.mean(error[error < np.quantile(error, 0.01)])
