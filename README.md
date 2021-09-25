@@ -8,6 +8,12 @@ To run the examples locally, ensure that all dependencies are installed by runni
 
 Documentation on how to use the functions within `mean_variance_hedge` is available at : [https://chrischia06.github.io/Mean-Variance-Hedging/mean_variance_hedge/](https://chrischia06.github.io/Mean-Variance-Hedging/mean_variance_hedge/)
 
+## Writeup
+
+**Dissertation**: https://www.overleaf.com/read/jsknxnzhfpcf
+**Slides**: https://www.overleaf.com/read/zhkgygymqpwr
+
+
 ## Notebooks
 
 **Dynamic Programming Hedge**
